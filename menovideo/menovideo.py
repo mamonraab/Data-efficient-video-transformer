@@ -47,11 +47,16 @@ class PostionalEcnoder(nn.Module):
     def __init__(self,embd_dim , dropout=0.1, time_steps=30):
         #embd_dim == d_model
         #time_steps == max_len
+
         super(PostionalEcnoder,self).__init__()
         self.dropout = nn.Dropout(p=dropout)
         self.embd_dim = embd_dim
         self.time_steps = time_steps
     def do_pos_encode(self):
+        
+        device =  'cuda' if torch.cuda.is_available() else 'cpu'
+
+
         pe = torch.zeros(self.time_steps , self.embd_dim).to(device)
         for pos in range(self.time_steps):
             for i in range(0,self.embd_dim , 2):# tow steps loop , for each dim in embddim
@@ -124,7 +129,10 @@ def DeVTr(w= 'none' , base ='default' ,classifier='default',mid_layer=1024,mid_d
 
                 )
         if w !='none':
-            model.load_state_dict(torch.load(w))
+            if torch.cuda.is_available():
+                model.load_state_dict(torch.load(w))
+            else:
+                model.load_state_dict(torch.load(w,map_location ='cpu'))
     else:
 
         bas2 =  nn.Sequential(base  , 
