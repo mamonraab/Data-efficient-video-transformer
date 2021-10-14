@@ -40,7 +40,10 @@ class TimeWarp(nn.Module):
         #print(x.shape)
         return x
 
-
+class extractlastcell(nn.Module):
+    def forward(self,x):
+        out , _ = x
+        return out[:, -1, :]
 # postiona encoder  give use the information of the postion or (time of frame in the seq)
 # it will help us to learn the temproal feature
 class PostionalEcnoder(nn.Module):
